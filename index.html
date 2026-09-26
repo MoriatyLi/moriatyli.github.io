@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Moriaty Library — Archive of Thought">
+  <title>Moriaty Library — Archive of Thought</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas class="starfield" id="starfield" aria-hidden="true"></canvas>
+  <div class="nebula nebula--one" aria-hidden="true"></div>
+  <div class="nebula nebula--two" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="wordmark" href="#library" aria-label="Moriaty Library 首页">
+      <span class="wordmark__name">MORIATY <i>LIBRARY</i></span>
+      <span class="wordmark__sub">ARCHIVE OF THOUGHT</span>
+    </a>
+    <nav class="topnav" aria-label="图书馆导航">
+      <button class="text-button" id="searchOpen" type="button" aria-haspopup="dialog">
+        <span class="search-mark" aria-hidden="true">⌕</span><span>SEARCH</span><kbd>/</kbd>
+      </button>
+      <button class="text-button" id="indexOpen" type="button" aria-haspopup="dialog">INDEX</button>
+    </nav>
+  </header>
+
+  <main id="library" class="library-main">
+    <div class="library-meta">
+      <span class="eyebrow"><span class="status-dot"></span> PRIVATE STUDY</span>
+      <span class="library-count" id="libraryCount">— VOLUMES · 6 COLLECTIONS</span>
+    </div>
+
+    <section class="library-scene" id="libraryScene" aria-label="六面主题书架，可水平旋转">
+      <div class="scene-vignette" aria-hidden="true"></div>
+      <div class="shelf-ring" id="shelfRing"></div>
+      <button class="scene-arrow scene-arrow--left" id="shelfPrev" type="button" aria-label="转向上一个书架">←</button>
+      <button class="scene-arrow scene-arrow--right" id="shelfNext" type="button" aria-label="转向下一个书架">→</button>
+    </section>
+
+    <section class="collection-caption" aria-live="polite" aria-atomic="true">
+      <div class="collection-caption__index" id="shelfCounter">I / VI</div>
+      <div class="collection-caption__titles">
+        <h1 id="shelfTitle">THOUGHT &amp; SELF</h1>
+        <p id="shelfTitleZh">思想 · 认知 · 自我</p>
+      </div>
+      <div class="collection-caption__dots" id="shelfDots" aria-label="选择书架"></div>
+    </section>
+
+    <p class="interaction-hint"><span aria-hidden="true">↔</span> DRAG TO TURN <span class="hint-divider">·</span> USE ← →</p>
+  </main>
+
+  <div class="book-card" id="bookCard" aria-live="polite" aria-atomic="true" hidden>
+    <span class="book-card__shelf" id="cardShelf"></span>
+    <strong id="cardTitle"></strong>
+    <span class="book-card__excerpt" id="cardExcerpt"></span>
+    <span class="book-card__meta" id="cardMeta"></span>
+    <span class="book-card__open">OPEN BOOK <span aria-hidden="true">↗</span></span>
+  </div>
+
+  <section class="reader" id="reader" role="dialog" aria-modal="true" aria-label="文章阅读器" aria-hidden="true" inert>
+    <div class="reader__top">
+      <button class="back-button" id="readerBack" type="button"><span aria-hidden="true">←</span> BACK TO LIBRARY</button>
+      <div class="reader__theme" aria-label="阅读主题">
+        <button class="theme-button is-active" id="themeNight" type="button" aria-pressed="true">NIGHT</button>
+        <button class="theme-button" id="themePaper" type="button" aria-pressed="false">PAPER</button>
+      </div>
+    </div>
+    <article class="reader-book" id="readerBook" tabindex="-1">
+      <div class="reader-book__collection" id="readerCollection"></div>
+      <h1 id="readerTitle"></h1>
+      <div class="reader-book__meta" id="readerMeta"></div>
+      <div class="reader-book__tags" id="readerTags"></div>
+      <hr>
+      <div class="prose" id="readerContent"></div>
+      <nav class="reader__bottom" aria-label="相邻文章">
+        <button class="reader-nav" id="bookPrev" type="button"><span>← PREVIOUS BOOK</span><strong></strong></button>
+        <button class="reader-nav reader-nav--center" id="readerReturn" type="button"><span>RETURN TO SHELF</span></button>
+        <button class="reader-nav reader-nav--right" id="bookNext" type="button"><span>NEXT BOOK →</span><strong></strong></button>
+      </nav>
+    </article>
+  </section>
+
+  <div class="dialog-backdrop" id="dialogBackdrop" hidden>
+    <section class="dialog" id="searchDialog" role="dialog" aria-modal="true" aria-labelledby="searchTitle" hidden>
+      <div class="dialog__top"><span class="eyebrow">LIBRARY SEARCH</span><button class="close-button" type="button" data-close aria-label="关闭搜索">ESC <b>×</b></button></div>
+      <h2 id="searchTitle">Find a volume.</h2>
+      <label class="search-field"><span class="search-mark" aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="标题、正文或标签" autocomplete="off"><kbd>ENTER</kbd></label>
+      <div class="result-heading"><span id="searchCount">输入关键词开始检索</span><span>TITLE · COLLECTION</span></div>
+      <div class="result-list" id="searchResults" role="listbox" aria-label="搜索结果"></div>
+    </section>
+
+    <section class="dialog dialog--index" id="indexDialog" role="dialog" aria-modal="true" aria-labelledby="indexTitle" hidden>
+      <div class="dialog__top"><span class="eyebrow">THE COMPLETE CATALOG</span><button class="close-button" type="button" data-close aria-label="关闭索引">ESC <b>×</b></button></div>
+      <div class="index-heading"><div><h2 id="indexTitle">All volumes.</h2><p id="indexSummary"></p></div><span class="index-count" id="indexCount"></span></div>
+      <div class="filter-row">
+        <label>COLLECTION<select id="filterShelf"><option value="all">All collections</option></select></label>
+        <label>YEAR<select id="filterYear"><option value="all">All years</option></select></label>
+        <label>TAG<select id="filterTag"><option value="all">All tags</option></select></label>
+        <label>TYPE<select id="filterType"><option value="all">All types</option></select></label>
+      </div>
+      <div class="index-list" id="indexResults" role="listbox" aria-label="文章索引"></div>
+    </section>
+  </div>
+
+  <footer class="site-footer"><span>EST. IN WORDS</span><span>MOVE THROUGH IDEAS</span></footer>
+
+  <script src="data/articles.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
