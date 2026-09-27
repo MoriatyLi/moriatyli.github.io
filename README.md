@@ -4,11 +4,11 @@ An offline-capable local website that presents the remaining owner-approved Mark
 
 ## Open locally
 
-Open `index.html` in a modern browser. The catalog is bundled locally, so the page needs no server, package install, network request, or remote service.
+Open `index.html` in a modern browser. The site is static and needs no server, package install, or network connection. Its sections appear in this order: homepage, photo gallery, library, and mindmap. The homepage uses the locally stored, AI-expanded `assets/moriaty-panorama-v1.png` as a full-viewport scene; its three chapter links follow the same order. The photo gallery uses 21 local files in `raw/photos/` and offers a rotating sphere and a two-column archive. Search and Index in the library use the existing catalog. Shelf rotation arrows are positioned within the Library section only. The original artwork and the generation prompt are preserved in `assets/`.
 
 ## Article sources and names
 
-The project owner confirmed that every file still present in `Ariticle_written/` can be used in this local website. Files already removed from that directory are not restored. The local generator keeps each original source file unchanged and records its source name separately from its website title.
+The project owner confirmed that files in `Ariticle_written/` can be used in this local website, with the explicit exception `数聚新潮——医疗健康合成数据交易的经纪商培育创业模式.md` (`计划书.docx`), which is excluded from the generated catalog. The source file remains unchanged. Files already removed from that directory are not restored. The local generator keeps source names separate from website titles.
 
 Run `pwsh -File scripts/generate-catalog.ps1` after adding or updating Markdown files. The generator normalizes Unicode, uses a clear leading H1 where available, removes export suffixes, duplicate-export markers and trailing Notion IDs, and assigns a stable ID. It keeps meaningful date-like prefixes such as `10.12`. It does not guess at mojibake: ambiguous titles go to a review list instead of appearing garbled in the site.
 
