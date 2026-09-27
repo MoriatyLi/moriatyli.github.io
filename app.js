@@ -68,6 +68,7 @@
   let previewArticle = null;
   let previewButton = null;
   let previewPinned = false;
+  let suppressBookClickUntil = 0;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const searchable = new Map(ARTICLES.map((article) => [
     article.id,
@@ -140,29 +141,31 @@
     });
 
     book.addEventListener('click', (event) => {
+      event.preventDefault();
       event.stopPropagation();
 
-      const isTouchDevice =
-        window.matchMedia('(pointer: coarse)').matches ||
-        window.innerWidth <= 820;
-
-      // 手机 / 平板：单击书脊直接打开文章
-      if (isTouchDevice) {
-        hideBookCard();
-        openBook(article, book);
+      if (
+        performance.now() <
+        suppressBookClickUntil
+      ) {
         return;
       }
 
-      // 桌面端：第一次点击固定预览，第二次点击打开
       if (
-        previewPinned &&
-        previewArticle === article &&
-        previewButton === book
+        dragState &&
+        dragState.moved
       ) {
-        openBook(article, book);
-      } else {
-        showBookCard(article, event, book, true);
+        return;
       }
+
+      // Step 1: clicking a book spine only opens the preview card.
+      // Step 2: only the cardOpen button opens the full article.
+      showBookCard(
+        article,
+        event,
+        book,
+        true
+      );
     });
 
     return book;
@@ -2149,28 +2152,36 @@
         }
       );
 
-    document
-      .getElementById('cardClose')
-      .addEventListener(
-        'click',
-        () => {
-          const button =
-            previewButton;
+    const cardClose =
+      document.getElementById('cardClose');
 
-          hideBookCard();
+    cardClose.addEventListener(
+      'pointerdown',
+      (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    );
 
-          if (
-            button &&
-            document.contains(button)
-          ) {
-            button.focus({
-              preventScroll: true
-            });
+    cardClose.addEventListener(
+      'click',
+      (event) => {
+        event.preventDefault();
+        event.stopPropagation();
 
-            hideBookCard();
-          }
+        suppressBookClickUntil =
+          performance.now() + 450;
+
+        hideBookCard();
+
+        if (
+          document.activeElement ===
+          cardClose
+        ) {
+          cardClose.blur();
         }
-      );
+      }
+    );
 
     document.addEventListener(
       'pointerdown',
@@ -2624,14 +2635,29 @@
     document.addEventListener(
       'click',
       (event) => {
-        if (!suppressDragClick) {
+        const target =
+          event.target instanceof Element
+            ? event.target
+            : null;
+
+        const suppressCloseGhostClick =
+          performance.now() <
+            suppressBookClickUntil &&
+          target &&
+          target.closest('.book');
+
+        if (
+          !suppressDragClick &&
+          !suppressCloseGhostClick
+        ) {
           return;
         }
 
-        suppressDragClick = false;
+        if (suppressDragClick) {
+          suppressDragClick = false;
+        }
 
         event.preventDefault();
-
         event.stopImmediatePropagation();
       },
       true
