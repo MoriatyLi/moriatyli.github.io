@@ -46,7 +46,8 @@
     "阐释赋予现实意义，也赋予现实混乱",
     "真实提供选择，选择创造信任",
     "金钱并非万能，但至少能维持你已经拥有的一切",
-    "可见即可解决"
+    "可见即可解决",
+    "智能=平庸的大脑+优秀的组织架构"
 ];
   const nodeLayer = document.getElementById('thoughtNodes');
   const thoughtNodes = [];

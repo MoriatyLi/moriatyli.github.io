@@ -402,18 +402,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .thought-tree__hint { opacity: 0; transition: opacity 700ms ease; }
 .thought-tree--ready .thought-tree__hint { opacity: 1; }
 
-.thought-tree__quote {
-  position: absolute;
-  z-index: 4;
-  top: 88px;
-  right: 22px;
-  left: clamp(22px, 5vw, 76px);
-  margin: 0;
-  color: #d5b586;
-  font: 400 clamp(14px, 1.3vw, 18px)/1.8 Georgia, "Songti SC", "SimSun", serif;
-  letter-spacing: .06em;
-  pointer-events: none;
-}
 .thought-tree__brand {
   position: absolute;
   z-index: 6;
@@ -690,7 +678,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
       <span class="wordmark__name">MORIATY <i>MINDMAP</i></span>
       <span class="wordmark__sub">ARCHIVE OF THOUGHT</span>
     </a>
-    <p class="thought-tree__quote">智能=平庸的大脑+优秀的组织架构</p>
     <canvas class="thought-tree__canvas" id="thoughtTreeCanvas" aria-hidden="true"></canvas>
     <svg class="thought-tree__fallback" aria-hidden="true" viewBox="0 0 1000 720" preserveAspectRatio="xMidYMid meet">
       <!-- Particle-only fallback is populated by thought-tree.js. -->
@@ -699,7 +686,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     <div class="thought-tree__bubble" id="thoughtBubble" aria-hidden="true" role="status" aria-live="polite" aria-atomic="true">
       <p id="thoughtBubbleText"></p>
     </div>
-    <div class="thought-tree__nodes" id="thoughtNodes" role="group" aria-label="树冠上的 23 个思想光点" inert></div>
+    <div class="thought-tree__nodes" id="thoughtNodes" role="group" aria-label="树冠上的 24 个思想光点" inert></div>
     <p class="thought-tree__hint"><span class="thought-tree__hint-mark" aria-hidden="true">✦</span> 悬停光点阅读 · 点击固定 · 再次点击或 ESC 收起</p>
     <noscript><p class="thought-tree__noscript">The thought tree is a quiet map of observation, order, and time.</p></noscript>
   </section>
@@ -766,7 +753,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   <script src="data/articles.js"></script>
   <script src="app.js?v=20260927-2"></script>
   <script src="assets/moriaty-observer-particles.js"></script>
-  <script src="thought-tree.js"></script>
+  <script src="thought-tree.js?v=20260929-1"></script>
   <script src="photo-gallery.js"></script>
 </body>
 </html>
